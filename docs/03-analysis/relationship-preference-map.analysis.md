@@ -16,6 +16,11 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 온보딩부터 40문항 완주, 중간 챕터, 결과 화면까지 검증했으며 새로고침 후 진행 상태
 복구도 확인했다. 390px, 768px, 1280px 너비에서 가로 오버플로가 발생하지 않았다.
 
+사용자 피드백에서 퇴근 후 위로, 생일, 재회처럼 비슷한 시간·사건이 반복되고
+받기/표현 트랙이 같은 장면을 뒤집어 사용한다는 콘텐츠 갭을 확인했다. 2차 Act에서
+40개 문항을 모두 서로 다른 관계 상황으로 교체하고, 갈등·돈·가사·가족·거리·건강·
+경계·취미·창작 등 실제 연인이 조율하는 맥락으로 분포를 넓혔다.
+
 첫 브라우저 검증에서 마지막 챕터 안내 문구와 복수 상위 항목의 한국어 조사가
 어색한 문제를 발견해 즉시 보완했다. 클립보드 접근 실패 시 직접 복사할 수 있는
 텍스트 영역도 설계대로 구현했다.
@@ -49,6 +54,7 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 - [x] Five stable category identifiers and Korean display metadata
 - [x] 40 original scenario questions
 - [x] Ten unique category pairs exactly twice per track
+- [x] Forty distinct context labels without receive/express scene mirroring
 - [x] Time, event and emotional context in every scene
 - [x] Receive/express subject direction separated
 - [x] Consensual and non-sexual touch wording
@@ -97,7 +103,7 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 ### Automated
 
 - Command: `npm test`
-- Result: 9 passed, 0 failed
+- Result: 10 passed, 0 failed
 - Command: `git diff --check`
 - Result: no whitespace errors
 
@@ -120,6 +126,7 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 | Korean postposition was awkward for a co-primary result | Rephrased the difference sentence without variable postpositions |
 | Clipboard failure only showed a toast | Added a selectable fallback textarea |
 | Browser requested a missing favicon | Added an inline SVG favicon |
+| 질문 장면이 퇴근·기념일·재회에 편중됨 | 40개 고유 맥락으로 전면 교체하고 중복 방지 테스트 추가 |
 
 ## Missing Items
 
@@ -136,4 +143,3 @@ None within the approved MVP scope.
 
 Match rate is above 90%. Proceed to completion report and use a small pilot as the next
 product discovery cycle rather than adding backend scope.
-

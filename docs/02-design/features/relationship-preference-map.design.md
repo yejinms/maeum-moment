@@ -156,7 +156,7 @@ External font requests are not required.
 
 ```js
 {
-  version: 1,
+  version: 2,
   view: "question",
   context: "specific",
   activeTrack: "receive",
@@ -186,14 +186,14 @@ External font requests are not required.
 
 ### 6.2 Context Distribution
 
-- 위로·회복
-- 평범한 일상
-- 축하·성취
-- 기념일·기억
-- 바쁨·아픔
-- 재회·거리
-- 새로운 도전
-- 갈등 이후
+- 갈등·사과·질투·연락 규칙
+- 돈·집안일·생활 습관·이사와 이직
+- 가족·친구·명절·반려동물
+- 장거리·시차·여행 변수
+- 취미·창작·공연·새로운 도전
+- 건강검사·상담·감각 과부하·가족 돌봄
+- 애정 표현의 경계·스킨십 속도·공개적인 친밀감
+- 각 트랙 20개, 전체 40개의 서로 다른 상황 라벨
 
 ### 6.3 Editorial Checklist
 
@@ -204,6 +204,7 @@ External font requests are not required.
 - 성 역할, 경제력, 동거 여부를 불필요하게 전제하지 않는가?
 - 접촉은 명시적으로 동의된 비성적 행동인가?
 - 받기 문항과 표현 문항의 주어가 혼동되지 않는가?
+- 같은 기념일·퇴근·재회 장면을 표현 방향만 바꿔 재사용하지 않았는가?
 
 ## 7. Business Logic
 
@@ -238,6 +239,7 @@ External font requests are not required.
 ### 7.4 Persistence
 
 - key: `maeum-moment-state-v1`
+- 문항 세트가 전면 변경되면 상태 버전을 올려 이전 선택을 안전하게 초기화한다.
 - 저장 시점: 맥락 선택, 문항 선택, 확신도 선택, 이전 이동, 트랙 완료
 - 개인정보나 자유 입력 텍스트는 수집하지 않는다.
 - 초기화는 확인 대화상자 후 해당 키만 삭제한다.
@@ -364,4 +366,3 @@ buildShareText(results) -> string
 - 독자 문항과 결과 표현만 사용한다.
 - 공식 브랜드 로고, 색상, 검사 문장, 보고서 문구를 사용하지 않는다.
 - 출시 전 서비스명 및 카테고리 표현에 대한 별도 상표 검토가 필요하다.
-

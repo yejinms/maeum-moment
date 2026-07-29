@@ -33,6 +33,7 @@
 - [x] Starter 수준의 Plan 및 Design 문서
 - [x] 받는 사랑 20개 독자 문항
 - [x] 표현하는 사랑 20개 독자 문항
+- [x] 받기/표현을 통틀어 중복 없는 40개 관계 상황
 - [x] 전체 범주 쌍 균형 검증
 - [x] 시드 기반 문항 순서 및 A/B 위치 분산
 - [x] 선택 확신도 가중치
@@ -65,10 +66,10 @@
 | Metric | Value |
 |---|---:|
 | Final match rate | 100% |
-| Automated tests | 9 passed / 0 failed |
+| Automated tests | 10 passed / 0 failed |
 | Source and test lines | 2,830 |
 | Project files excluding `.git` | 16 |
-| Scenario questions | 40 |
+| Scenario questions | 40 distinct contexts |
 | Category pairs per track | 10 × 2 repetitions |
 | Browser flow | 40 questions completed |
 | Responsive widths | 390, 768, 1280px |
@@ -77,7 +78,7 @@
 
 ## 5. Quality Evidence
 
-- `npm test`: 9/9 pass
+- `npm test`: 10/10 pass
 - `git diff --check`: pass
 - first visit and context selection: pass
 - choice and confidence transition: pass
@@ -100,6 +101,13 @@
 - 선택 문항이 40개라 실제 사용자에게는 피로가 생길 수 있다.
 - 구조적 균형은 검증했지만 선택지의 노력·비용·매력도 균형은 사용자 데이터가 필요하다.
 - 단순 가중 점수는 자기성찰에는 적합하지만 모집단 비교나 심리측정에는 사용할 수 없다.
+
+### Iteration
+
+- 첫 버전의 퇴근 후 위로·생일·재회 중심 장면을 전면 재작성했다.
+- 갈등, 경제, 생활 분담, 가족, 거리, 건강, 경계, 취미 등 40개 고유 맥락으로 확장했다.
+- 받기와 표현 트랙이 같은 사건을 주어만 바꿔 반복하지 않도록 데이터 검사를 추가했다.
+- 기존 문항 선택이 새 장면에 이어지지 않도록 저장 상태 버전을 올렸다.
 
 ### Try
 
@@ -127,4 +135,3 @@ npm start
 ```
 
 브라우저에서 `http://localhost:4173`을 연다.
-

@@ -37,3 +37,12 @@ test("each category pair appears exactly twice per track", () => {
   }
 });
 
+test("all 40 questions use distinct relationship contexts", () => {
+  const contexts = QUESTIONS.map((item) => item.context);
+  assert.equal(new Set(contexts).size, 40);
+
+  for (const track of ["receive", "express"]) {
+    const trackContexts = getQuestions(track).map((item) => item.context);
+    assert.equal(new Set(trackContexts).size, 20);
+  }
+});

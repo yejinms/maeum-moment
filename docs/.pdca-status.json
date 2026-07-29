@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-07-29T07:16:18.580Z",
+  "lastUpdated": "2026-07-29T08:07:49.118Z",
   "activeFeatures": [
     "relationship-preference-map"
   ],
@@ -9,7 +9,7 @@
     "relationship-preference-map": {
       "phase": "completed",
       "matchRate": null,
-      "iterationCount": 1,
+      "iterationCount": 3,
       "documents": {},
       "taskChain": [
         {
@@ -45,9 +45,9 @@
       ],
       "timestamps": {
         "started": "2026-07-29T06:57:18.610Z",
-        "lastUpdated": "2026-07-29T07:16:18.580Z"
+        "lastUpdated": "2026-07-29T08:07:49.118Z"
       },
-      "completedAt": "2026-07-29T07:16:18.579Z"
+      "completedAt": "2026-07-29T08:07:49.117Z"
     }
   },
   "pipeline": {
@@ -58,7 +58,7 @@
   "session": {
     "startedAt": "2026-07-29T06:57:18.605Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-07-29T07:16:18.580Z"
+    "lastActivity": "2026-07-29T08:07:49.118Z"
   },
   "history": [
     {
@@ -125,6 +125,39 @@
       "phase": "report",
       "nextPhase": "completed",
       "timestamp": "2026-07-29T07:16:18.580Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "check",
+      "to": "act",
+      "timestamp": "2026-07-29T08:07:49.106Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "check",
+      "nextPhase": "act",
+      "timestamp": "2026-07-29T08:07:49.106Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "act",
+      "to": "report",
+      "timestamp": "2026-07-29T08:07:49.112Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "act",
+      "nextPhase": "report",
+      "timestamp": "2026-07-29T08:07:49.112Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "report",
+      "nextPhase": "completed",
+      "timestamp": "2026-07-29T08:07:49.117Z"
     }
   ]
 }
