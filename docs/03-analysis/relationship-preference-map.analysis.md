@@ -1,0 +1,139 @@
+# Gap Analysis: relationship-preference-map
+
+> Date: 2026-07-29
+> Design: `docs/02-design/features/relationship-preference-map.design.md`
+> Implementation: `index.html`, `css/`, `js/`, `tests/`
+
+---
+
+## Match Rate: 100%
+
+`40 implemented design checkpoints / 40 total design checkpoints × 100 = 100%`
+
+## Summary
+
+Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다. 실제 브라우저에서
+온보딩부터 40문항 완주, 중간 챕터, 결과 화면까지 검증했으며 새로고침 후 진행 상태
+복구도 확인했다. 390px, 768px, 1280px 너비에서 가로 오버플로가 발생하지 않았다.
+
+첫 브라우저 검증에서 마지막 챕터 안내 문구와 복수 상위 항목의 한국어 조사가
+어색한 문제를 발견해 즉시 보완했다. 클립보드 접근 실패 시 직접 복사할 수 있는
+텍스트 영역도 설계대로 구현했다.
+
+## Match Matrix
+
+| Area | Design Items | Implemented | Match |
+|---|---:|---:|---:|
+| Information architecture and flow | 7 | 7 | 100% |
+| Question data and editorial structure | 6 | 6 | 100% |
+| State, ordering, scoring and persistence | 9 | 9 | 100% |
+| UI components, visual system and responsive layout | 7 | 7 | 100% |
+| Accessibility, error handling, privacy and IP boundaries | 7 | 7 | 100% |
+| Automated tests and project operation | 4 | 4 | 100% |
+| **Total** | **40** | **40** | **100%** |
+
+## Implemented Items
+
+### Information Architecture and Flow — 7/7
+
+- [x] Welcome, context, chapter intro, question, confidence, chapter complete, result states
+- [x] Specific person/general partner context selection
+- [x] Receive track followed by express track
+- [x] 20 questions per track
+- [x] Previous question and choice revision
+- [x] Chapter intermediate summary
+- [x] Incomplete result access recovery
+
+### Question Data and Editorial Structure — 6/6
+
+- [x] Five stable category identifiers and Korean display metadata
+- [x] 40 original scenario questions
+- [x] Ten unique category pairs exactly twice per track
+- [x] Time, event and emotional context in every scene
+- [x] Receive/express subject direction separated
+- [x] Consensual and non-sexual touch wording
+
+### State, Ordering, Scoring and Persistence — 9/9
+
+- [x] Seed-based deterministic question shuffle
+- [x] Seed-based deterministic A/B position flip
+- [x] Close 1.0 / clear 1.25 confidence weights
+- [x] Category-relative 0–100 display score
+- [x] Stable five-category ranking
+- [x] Under-five-point co-primary preference rule
+- [x] Repeated-pair context split detection
+- [x] Receive/express difference summary
+- [x] Versioned localStorage save, recovery and reset
+
+### UI and Responsive Design — 7/7
+
+- [x] Warm paper-card visual system and design tokens
+- [x] Mobile-first single-column choice layout
+- [x] Desktop two-column choice and ranking layout
+- [x] Progress, scene, choice and confidence components
+- [x] Ranking, difference and concrete action result components
+- [x] Share, copy and reset controls
+- [x] Reduced-motion handling
+
+### Accessibility, Error, Privacy and IP — 7/7
+
+- [x] Semantic headings, buttons, ordered ranking lists and landmarks
+- [x] Progress bar ARIA metadata and polite live regions
+- [x] Screen title focus after state transitions
+- [x] Visible focus treatment and non-color-only selection cues
+- [x] Missing data, storage failure, Web Share and clipboard fallbacks
+- [x] Local-only data and non-diagnostic disclaimers
+- [x] Original product name, copy and visual assets
+
+### Tests and Operations — 4/4
+
+- [x] Data count, unique ID and pair distribution tests
+- [x] Score weight, rank and context split tests
+- [x] Difference summary and share text tests
+- [x] README start/test/privacy instructions
+
+## Verification Evidence
+
+### Automated
+
+- Command: `npm test`
+- Result: 9 passed, 0 failed
+- Command: `git diff --check`
+- Result: no whitespace errors
+
+### Browser
+
+- Start → context → receive 20 → express 20 → result completed
+- Choice → confidence → next question transition completed
+- Reload on question 2 restored the identical question
+- Result rankings, difference summary and selected-action cards rendered
+- Viewport overflow:
+  - 390×844: none
+  - 768×1024: none
+  - 1280×800: none
+
+## Changed Items (Resolved During Check)
+
+| Finding | Resolution |
+|---|---|
+| Last chapter reused a “next chapter” message | Added final-chapter-specific completion copy |
+| Korean postposition was awkward for a co-primary result | Rephrased the difference sentence without variable postpositions |
+| Clipboard failure only showed a toast | Added a selectable fallback textarea |
+| Browser requested a missing favicon | Added an inline SVG favicon |
+
+## Missing Items
+
+None within the approved MVP scope.
+
+## Remaining Product Risks
+
+- The item set has structural balance but has not been validated with real users.
+- Effort and desirability balance between choices needs pilot interviews and response-time review.
+- Service naming and category wording require a separate trademark review before commercial launch.
+- The simple score is appropriate only for within-person reflection, not population comparison.
+
+## Recommendation
+
+Match rate is above 90%. Proceed to completion report and use a small pilot as the next
+product discovery cycle rather than adding backend scope.
+

@@ -1,0 +1,130 @@
+{
+  "version": "2.0",
+  "lastUpdated": "2026-07-29T07:16:18.580Z",
+  "activeFeatures": [
+    "relationship-preference-map"
+  ],
+  "primaryFeature": "relationship-preference-map",
+  "features": {
+    "relationship-preference-map": {
+      "phase": "completed",
+      "matchRate": null,
+      "iterationCount": 1,
+      "documents": {},
+      "taskChain": [
+        {
+          "phase": "plan",
+          "status": "completed",
+          "createdAt": "2026-07-29T06:57:18.609Z",
+          "completedAt": "2026-07-29T06:58:39.889Z"
+        },
+        {
+          "phase": "design",
+          "status": "completed",
+          "createdAt": "2026-07-29T06:57:18.609Z",
+          "completedAt": "2026-07-29T07:00:18.208Z"
+        },
+        {
+          "phase": "do",
+          "status": "completed",
+          "createdAt": "2026-07-29T06:57:18.609Z",
+          "completedAt": "2026-07-29T07:12:41.757Z"
+        },
+        {
+          "phase": "check",
+          "status": "completed",
+          "createdAt": "2026-07-29T06:57:18.609Z",
+          "completedAt": "2026-07-29T07:15:16.728Z"
+        },
+        {
+          "phase": "report",
+          "status": "completed",
+          "createdAt": "2026-07-29T06:57:18.609Z",
+          "completedAt": "2026-07-29T07:16:18.580Z"
+        }
+      ],
+      "timestamps": {
+        "started": "2026-07-29T06:57:18.610Z",
+        "lastUpdated": "2026-07-29T07:16:18.580Z"
+      },
+      "completedAt": "2026-07-29T07:16:18.579Z"
+    }
+  },
+  "pipeline": {
+    "currentPhase": 1,
+    "level": "Starter",
+    "phaseHistory": []
+  },
+  "session": {
+    "startedAt": "2026-07-29T06:57:18.605Z",
+    "onboardingCompleted": false,
+    "lastActivity": "2026-07-29T07:16:18.580Z"
+  },
+  "history": [
+    {
+      "feature": "relationship-preference-map",
+      "from": "plan",
+      "to": "design",
+      "timestamp": "2026-07-29T06:58:39.886Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "plan",
+      "nextPhase": "design",
+      "timestamp": "2026-07-29T06:58:39.888Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "design",
+      "to": "design",
+      "timestamp": "2026-07-29T06:58:47.236Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "design",
+      "to": "do",
+      "timestamp": "2026-07-29T07:00:18.207Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "design",
+      "nextPhase": "do",
+      "timestamp": "2026-07-29T07:00:18.208Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "do",
+      "to": "check",
+      "timestamp": "2026-07-29T07:12:41.754Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "do",
+      "nextPhase": "check",
+      "timestamp": "2026-07-29T07:12:41.756Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "from": "check",
+      "to": "act",
+      "timestamp": "2026-07-29T07:15:16.726Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "check",
+      "nextPhase": "act",
+      "timestamp": "2026-07-29T07:15:16.727Z"
+    },
+    {
+      "feature": "relationship-preference-map",
+      "action": "phase_complete",
+      "phase": "report",
+      "nextPhase": "completed",
+      "timestamp": "2026-07-29T07:16:18.580Z"
+    }
+  ]
+}
