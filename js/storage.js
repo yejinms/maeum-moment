@@ -1,5 +1,5 @@
 const STORAGE_KEY = "maeum-moment-state-v1";
-const STATE_VERSION = 2;
+const STATE_VERSION = 3;
 
 export function loadState() {
   try {

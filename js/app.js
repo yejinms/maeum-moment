@@ -202,6 +202,7 @@ function renderChapterIntro() {
       <ul class="chapter-rules">
         <li>두 선택지 모두 좋더라도 조금 더 마음이 가는 쪽을 선택해요.</li>
         <li>선택한 뒤 ‘간발의 차이’인지 ‘확실히 이쪽’인지 알려주세요.</li>
+        <li>접촉 선택지는 서로 편안하고 동의된 관계 상황을 전제로 해요.</li>
         <li>이전 장면으로 돌아가 답을 바꿀 수 있어요.</li>
       </ul>
       <button class="primary-button" data-action="start-track">

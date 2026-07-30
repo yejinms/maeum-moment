@@ -34,6 +34,8 @@
 - [x] 받는 사랑 20개 독자 문항
 - [x] 표현하는 사랑 20개 독자 문항
 - [x] 받기/표현을 통틀어 중복 없는 40개 관계 상황
+- [x] 접촉의 동의 전제를 공통 안내로 제공하고 경계 문항에만 절차 표현 유지
+- [x] 범주별 반복 동사와 행동 패턴을 제한하는 편집 테스트
 - [x] 전체 범주 쌍 균형 검증
 - [x] 시드 기반 문항 순서 및 A/B 위치 분산
 - [x] 선택 확신도 가중치
@@ -66,7 +68,7 @@
 | Metric | Value |
 |---|---:|
 | Final match rate | 100% |
-| Automated tests | 10 passed / 0 failed |
+| Automated tests | 11 passed / 0 failed |
 | Source and test lines | 2,830 |
 | Project files excluding `.git` | 16 |
 | Scenario questions | 40 distinct contexts |
@@ -78,7 +80,7 @@
 
 ## 5. Quality Evidence
 
-- `npm test`: 10/10 pass
+- `npm test`: 11/11 pass
 - `git diff --check`: pass
 - first visit and context selection: pass
 - choice and confidence transition: pass
@@ -108,6 +110,9 @@
 - 갈등, 경제, 생활 분담, 가족, 거리, 건강, 경계, 취미 등 40개 고유 맥락으로 확장했다.
 - 받기와 표현 트랙이 같은 사건을 주어만 바꿔 반복하지 않도록 데이터 검사를 추가했다.
 - 기존 문항 선택이 새 장면에 이어지지 않도록 저장 상태 버전을 올렸다.
+- 특수 취미·돌발 위기 중심 문항을 보편적인 연애 일상으로 다시 교체했다.
+- 접촉 16개 중 확인 질문은 경계 문항에만 남기고 손잡기 중심 행동을 분산했다.
+- 선물·도움·말·시간 선택지의 반복 문장 구조를 전면 에디팅했다.
 
 ### Try
 

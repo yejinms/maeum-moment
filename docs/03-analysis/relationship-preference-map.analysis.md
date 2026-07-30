@@ -21,6 +21,11 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 40개 문항을 모두 서로 다른 관계 상황으로 교체하고, 갈등·돈·가사·가족·거리·건강·
 경계·취미·창작 등 실제 연인이 조율하는 맥락으로 분포를 넓혔다.
 
+3차 Act에서는 특수한 취미·위기 상황과 범주별 문장 공식이 다시 공감도를 낮춘다는
+피드백을 반영했다. 접촉 선택지 16개 중 13개에 반복되던 확인 질문을 챕터 공통
+전제로 옮겼고, 손 접촉은 11개에서 5개로 줄였다. 선물의 `작은`과 `건넨다`,
+도움의 계획표·알림·정리 같은 반복 표현도 제거하거나 분산했다.
+
 첫 브라우저 검증에서 마지막 챕터 안내 문구와 복수 상위 항목의 한국어 조사가
 어색한 문제를 발견해 즉시 보완했다. 클립보드 접근 실패 시 직접 복사할 수 있는
 텍스트 영역도 설계대로 구현했다.
@@ -55,6 +60,9 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 - [x] 40 original scenario questions
 - [x] Ten unique category pairs exactly twice per track
 - [x] Forty distinct context labels without receive/express scene mirroring
+- [x] Common relationship situations replacing niche hobbies and forced emergencies
+- [x] Shared consent premise with boundary-specific explicit confirmation
+- [x] Automated caps for repeated category wording
 - [x] Time, event and emotional context in every scene
 - [x] Receive/express subject direction separated
 - [x] Consensual and non-sexual touch wording
@@ -103,7 +111,7 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 ### Automated
 
 - Command: `npm test`
-- Result: 10 passed, 0 failed
+- Result: 11 passed, 0 failed
 - Command: `git diff --check`
 - Result: no whitespace errors
 
@@ -127,6 +135,9 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 | Clipboard failure only showed a toast | Added a selectable fallback textarea |
 | Browser requested a missing favicon | Added an inline SVG favicon |
 | 질문 장면이 퇴근·기념일·재회에 편중됨 | 40개 고유 맥락으로 전면 교체하고 중복 방지 테스트 추가 |
+| 접촉 16개 중 13개가 확인 질문으로 시작함 | 동의 전제를 챕터 안내로 옮기고 접촉 행동을 다변화 |
+| 선물·도움·말 선택지가 같은 문장 공식 반복 | 80개 선택지를 재편집하고 반복 빈도 테스트 추가 |
+| 특수 취미와 위기 상황이 공감과 균형을 저해 | 일상적인 휴일·자취·여행·요리·악몽·영화 장면으로 교체 |
 
 ## Missing Items
 

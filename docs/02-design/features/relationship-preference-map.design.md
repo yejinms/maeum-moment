@@ -156,7 +156,7 @@ External font requests are not required.
 
 ```js
 {
-  version: 2,
+  version: 3,
   view: "question",
   context: "specific",
   activeTrack: "receive",
@@ -205,6 +205,11 @@ External font requests are not required.
 - 접촉은 명시적으로 동의된 비성적 행동인가?
 - 받기 문항과 표현 문항의 주어가 혼동되지 않는가?
 - 같은 기념일·퇴근·재회 장면을 표현 방향만 바꿔 재사용하지 않았는가?
+- 접촉의 동의 전제는 챕터 안내에서 제공하고, 경계 자체가 쟁점인 문항에서만 선택지에 다시 드러내는가?
+- 범주마다 같은 동사·소품·문장 구조를 반복하지 않는가?
+- 접촉은 손잡기 외에 포옹, 팔짱, 기대기, 토닥이기 등으로 분산되는가?
+- 선물은 `작은 물건을 골라 건넨다`는 공식에 의존하지 않는가?
+- 실제적인 도움은 계획표·알림·정리에만 치우치지 않는가?
 
 ## 7. Business Logic
 
@@ -336,6 +341,8 @@ buildShareText(results) -> string
 | T-07 | 동일 입력에서 순위가 결정적으로 재현 |
 | T-08 | 분할 선택에서 `contextSplitCount`가 계산 |
 | T-09 | 받기/표현 1위가 다를 때 차이 문장 생성 |
+| T-10 | 40개 상황 라벨이 중복되지 않음 |
+| T-11 | 범주별 반복 표현이 편집 상한을 넘지 않음 |
 
 ### 12.2 Manual
 
