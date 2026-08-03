@@ -12,6 +12,12 @@
 
 ## Summary
 
+2026-08-03 Act에서는 40문항을 순서대로 강제하던 흐름을 두 개의 독립 테스트로
+분리했다. 첫 선택 화면에서 받기/표현 중 원하는 테스트를 고르고, 20문항 완료 즉시
+단독 결과를 확인한다. 사용자가 추가 테스트를 선택해 완료하면 방금 결과, 이전 결과,
+두 방향의 통합본을 한 화면에 이어서 제공한다. 특정 인물 여부 선택과 중간 완료
+화면은 제거했다.
+
 Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다. 실제 브라우저에서
 온보딩부터 40문항 완주, 중간 챕터, 결과 화면까지 검증했으며 새로고침 후 진행 상태
 복구도 확인했다. 390px, 768px, 1280px 너비에서 가로 오버플로가 발생하지 않았다.
@@ -46,9 +52,10 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 
 ### Information Architecture and Flow — 7/7
 
-- [x] Welcome, context, chapter intro, question, confidence, chapter complete, result states
-- [x] Specific person/general partner context selection
-- [x] Receive track followed by express track
+- [x] Welcome, track select, chapter intro, question, confidence, result states
+- [x] Receive/express independent first-test selection
+- [x] Immediate single-track result and optional remaining test
+- [x] Latest result, previous result and integrated result ordering
 - [x] 20 questions per track
 - [x] Previous question and choice revision
 - [x] Chapter intermediate summary
@@ -111,18 +118,20 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 ### Automated
 
 - Command: `npm test`
-- Result: 11 passed, 0 failed
+- Result: 15 passed, 0 failed
 - Command: `git diff --check`
 - Result: no whitespace errors
 
 ### Browser
 
-- Start → context → receive 20 → express 20 → result completed
+- Start → track select → express 20 → single result → receive 20 → integrated result completed
+- Single result displayed the optional remaining-test CTA without forcing continuation
+- Final result order: latest receive result → earlier express result → integrated summary
 - Choice → confidence → next question transition completed
 - Reload on question 2 restored the identical question
 - Result rankings, difference summary and selected-action cards rendered
 - Viewport overflow:
-  - 390×844: none
+  - 390×844: none (`scrollWidth` 390px)
   - 768×1024: none
   - 1280×800: none
 

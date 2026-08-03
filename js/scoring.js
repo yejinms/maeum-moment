@@ -123,6 +123,23 @@ export function buildDifferenceSummary(receiveResult, expressResult) {
   return `주로 마음을 표현하는 방식은 ${categoryPhrase(expressTop)}이고, 사랑을 더 선명하게 느끼는 방식은 ${categoryPhrase(receiveTop)}입니다.`;
 }
 
+export function buildTrackShareText(result) {
+  const label =
+    result.track === "receive" ? "사랑을 느끼는 순서" : "사랑을 표현하는 순서";
+  const names = result.ranking
+    .map((item, index) => `${index + 1}. ${CATEGORIES[item.category].name}`)
+    .join("\n");
+
+  return [
+    "마음의 순간 — 나의 관계 선호 지도",
+    "",
+    `[${label}]`,
+    names,
+    "",
+    "이 결과는 진단이 아니라 대화를 위한 개인 내 상대 순위예요.",
+  ].join("\n");
+}
+
 export function buildShareText(receiveResult, expressResult) {
   const receiveNames = receiveResult.ranking
     .map((item, index) => `${index + 1}. ${CATEGORIES[item.category].name}`)

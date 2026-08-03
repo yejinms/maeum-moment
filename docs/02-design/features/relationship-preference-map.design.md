@@ -1,15 +1,15 @@
 # relationship-preference-map - Design Document (Starter)
 
-> Version: 1.0.0 | Date: 2026-07-29 | Status: Approved for implementation
+> Version: 1.1.0 | Date: 2026-08-03 | Status: Approved for implementation
 > Level: Starter | Plan: `docs/01-plan/features/relationship-preference-map.plan.md`
 
 ---
 
 ## 1. Overview
 
-`마음의 순간`은 사용자가 특정 상대 또는 일반적인 연인을 떠올리며 장면형
-밸런스 게임을 진행하고, 받는 사랑과 표현하는 사랑의 상대적 우선순위를 확인하는
-모바일 우선 단일 페이지 웹앱이다.
+`마음의 순간`은 사용자가 장면형 밸런스 게임을 진행하고, 받는 사랑과 표현하는
+사랑 중 원하는 방향의 상대적 우선순위부터 확인하는 모바일 우선 단일 페이지
+웹앱이다. 두 테스트는 독립적으로 완료할 수 있고, 모두 완료하면 통합본을 제공한다.
 
 애플리케이션은 서버 없이 동작한다. 문항 데이터, 상태 관리, 점수 계산, 결과
 렌더링을 각각 분리하고 브라우저 `localStorage`에 진행 상태를 저장한다.
@@ -21,22 +21,21 @@
 | State | Purpose | Entry Condition |
 |---|---|---|
 | `welcome` | 가치 제안, 소요 시간, 비진단 안내 | 첫 방문 또는 초기화 |
-| `context` | 평가 대상 맥락 선택 | 시작 버튼 |
-| `chapter-intro` | 받기/표현 트랙 설명 | 맥락 선택 또는 첫 트랙 완료 |
+| `track-select` | 받기/표현 중 먼저 할 테스트 선택 | 시작 버튼 |
+| `chapter-intro` | 선택한 트랙 설명 | 테스트 선택 또는 추가 테스트 선택 |
 | `question` | 장면과 두 선택지 제시 | 트랙 시작 |
 | `confidence` | 선택 강도 기록 | A/B 선택 직후 |
-| `chapter-complete` | 한 트랙 중간 결과 | 20문항 완료 |
-| `result` | 통합 결과 및 행동 카드 | 두 트랙 완료 |
+| `result` | 단독 결과, 추가 테스트 제안 또는 통합 결과 | 한 트랙 이상 완료 |
 
 ### 2.2 Primary Flow
 
-`welcome → context → receive intro → 20 questions → receive summary →
-express intro → 20 questions → result`
+`welcome → track-select → selected intro → 20 questions → single result →
+(optional) other intro → 20 questions → latest result → previous result → combined result`
 
 ### 2.3 Recovery Flow
 
 - 진행 중 재접속: 저장된 화면과 문항 번호를 복원
-- 한 트랙 완료 후 재접속: 다음 트랙 소개 또는 결과 복원
+- 한 트랙 완료 후 재접속: 해당 단독 결과와 추가 테스트 선택 복원
 - 저장 데이터 버전 불일치: 안전하게 초기 상태로 이동
 
 ## 3. Visual Design
@@ -54,7 +53,7 @@ express intro → 20 questions → result`
 - 질문 화면: 상단 진행 정보, 장면 카드, VS 선택 카드 2개, 하단 뒤로가기
 - 데스크톱: 선택 카드 2열
 - 모바일: 선택 카드 세로 배치, 하단 진행 제어 고정
-- 결과: 핵심 요약 → 받기/표현 비교 → 순위 → 행동 카드 → 공유/초기화
+- 결과: 최근 트랙 순위·행동 → 이전 트랙 순위·행동 → 통합 요약 → 공유/초기화
 
 ### 3.3 Design Tokens
 
@@ -96,9 +95,10 @@ External font requests are not required.
 | `SceneCard` | 시간·사건·감정이 포함된 장면 |
 | `ChoiceCard` | A/B 행동 선택, 범주명 비노출 |
 | `ConfidencePanel` | 간발의 차이/확실히 선택 |
-| `ChapterSummary` | 한 트랙의 상위 범주와 다음 행동 |
+| `TrackSelector` | 받기/표현 중 시작할 테스트 선택 |
+| `TrackResult` | 완료한 한 트랙의 순위와 행동 카드 |
 | `RankingList` | 1~5위, 점수, 동점 표시 |
-| `DifferenceCard` | 받기와 표현의 차이 문장 |
+| `CombinedResult` | 두 트랙을 모두 완료했을 때 차이와 핵심 범주 통합 |
 | `ActionCards` | 사용자가 실제 선택한 행동 예시 |
 | `PrivacyNote` | 로컬 저장·비진단 안내 |
 | `Toast` | 복사 성공 등 상태 피드백 |
@@ -156,9 +156,8 @@ External font requests are not required.
 
 ```js
 {
-  version: 3,
+  version: 4,
   view: "question",
-  context: "specific",
   activeTrack: "receive",
   questionIndex: 0,
   order: {
@@ -245,7 +244,7 @@ External font requests are not required.
 
 - key: `maeum-moment-state-v1`
 - 문항 세트가 전면 변경되면 상태 버전을 올려 이전 선택을 안전하게 초기화한다.
-- 저장 시점: 맥락 선택, 문항 선택, 확신도 선택, 이전 이동, 트랙 완료
+- 저장 시점: 테스트 선택, 문항 선택, 확신도 선택, 이전 이동, 트랙 완료
 - 개인정보나 자유 입력 텍스트는 수집하지 않는다.
 - 초기화는 확인 대화상자 후 해당 키만 삭제한다.
 
@@ -263,7 +262,10 @@ getQuestions(track) -> Question[]
 validateQuestionSet(questions) -> { valid, errors }
 calculateTrackResult(track, answers) -> TrackResult
 buildDifferenceSummary(receiveResult, expressResult) -> string
+buildTrackShareText(result) -> string
 buildShareText(results) -> string
+getRemainingTrack(completedTracks) -> Track | null
+getResultOrder(completedTracks, activeTrack) -> Track[]
 ```
 
 ### 8.2 TrackResult

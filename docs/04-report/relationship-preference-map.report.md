@@ -16,6 +16,10 @@
 트랙별로 정확히 두 번 비교한다. 사용자의 선택 강도와 상황에 따른 선택 차이를
 반영하고, 최종 결과에서 두 방향의 순위와 실제 선택 행동을 제공한다.
 
+2026-08-03에는 두 트랙을 순서대로 모두 해야 했던 흐름을 개선했다. 사용자는 받기와
+표현 중 원하는 테스트 하나만 먼저 진행해 바로 결과를 볼 수 있다. 나머지 테스트는
+선택 사항이며, 완료하면 최근 결과와 이전 결과 아래에 두 방향의 통합본이 이어진다.
+
 ### 1.2 Final Match Rate
 
 **100%** (Target: 90%)
@@ -33,6 +37,9 @@
 - [x] Starter 수준의 Plan 및 Design 문서
 - [x] 받는 사랑 20개 독자 문항
 - [x] 표현하는 사랑 20개 독자 문항
+- [x] 받기/표현 테스트 시작 순서 선택
+- [x] 한 테스트 완료 직후 단독 결과 제공
+- [x] 선택형 추가 테스트와 최근·이전·통합 결과 구성
 - [x] 받기/표현을 통틀어 중복 없는 40개 관계 상황
 - [x] 접촉의 동의 전제를 공통 안내로 제공하고 경계 문항에만 절차 표현 유지
 - [x] 범주별 반복 동사와 행동 패턴을 제한하는 편집 테스트
@@ -68,7 +75,7 @@
 | Metric | Value |
 |---|---:|
 | Final match rate | 100% |
-| Automated tests | 11 passed / 0 failed |
+| Automated tests | 15 passed / 0 failed |
 | Source and test lines | 2,830 |
 | Project files excluding `.git` | 16 |
 | Scenario questions | 40 distinct contexts |
@@ -80,13 +87,14 @@
 
 ## 5. Quality Evidence
 
-- `npm test`: 11/11 pass
+- `npm test`: 15/15 pass
 - `git diff --check`: pass
-- first visit and context selection: pass
+- first visit and receive/express test selection: pass
 - choice and confidence transition: pass
 - question 2 reload recovery: pass
-- receive 20 and express 20 completion: pass
-- result rank, summary and action cards: pass
+- express-first 20 and immediate single result: pass
+- optional receive 20 and integrated result: pass
+- latest result → previous result → combined summary ordering: pass
 - 390×844 result screen visual review: pass
 - 390/768/1280 document width check: pass
 

@@ -8,8 +8,14 @@ import {
 import {
   buildDifferenceSummary,
   buildShareText,
+  buildTrackShareText,
   calculateTrackResult,
 } from "./scoring.js";
+import {
+  getRemainingTrack,
+  getResultOrder,
+  isTrackComplete,
+} from "./flow.js";
 import { clearState, loadState, saveState, STATE_VERSION } from "./storage.js";
 
 const app = document.querySelector("#app");
@@ -55,8 +61,7 @@ function createInitialState(seed = Date.now() % 2147483647) {
   return {
     version: STATE_VERSION,
     view: "welcome",
-    context: null,
-    activeTrack: "receive",
+    activeTrack: null,
     questionIndex: 0,
     order: {
       receive: seededShuffle(
@@ -137,12 +142,12 @@ function renderWelcome() {
       </p>
       <div class="concept-strip" aria-label="비교할 다섯 가지 행동">${iconStrip()}</div>
       <button class="primary-button primary-button--hero" data-action="begin">
-        내 마음의 순서 찾기
+        테스트 시작하기
         <span aria-hidden="true">→</span>
       </button>
       <div class="trust-row">
-        <span>약 7분</span>
-        <span>40개 장면</span>
+        <span>테스트당 약 4분</span>
+        <span>하나씩 선택 가능</span>
         <span>기기에만 저장</span>
       </div>
       <aside class="soft-note">
@@ -156,25 +161,27 @@ function renderWelcome() {
   `;
 }
 
-function renderContext() {
+function renderTrackSelect() {
   return `
-    <section class="screen" aria-labelledby="app-title">
-      <div class="step-kicker">준비 · 1분</div>
-      <h1 id="app-title">누구를 떠올리며<br />선택할까요?</h1>
+    <section class="screen screen--track-select" aria-labelledby="app-title">
+      <div class="step-kicker">먼저 하나만 골라요</div>
+      <h1 id="app-title">어떤 테스트를<br />먼저 해볼까요?</h1>
       <p class="section-copy">
-        같은 행동도 관계와 시기에 따라 다르게 느껴질 수 있어요.
-        한 사람 또는 한 가지 관계 상황을 끝까지 유지해주세요.
+        두 테스트는 따로 진행할 수 있어요. 하나를 마치면 바로 결과를 보고,
+        원할 때 나머지 테스트를 이어서 통합 결과를 확인할 수 있습니다.
       </p>
-      <div class="context-grid">
-        <button class="context-card" data-action="choose-context" data-context="specific">
+      <div class="context-grid track-select-grid">
+        <button class="context-card track-select-card track-select-card--receive" data-action="choose-track" data-track="receive">
           <span class="context-card__icon" aria-hidden="true">♥</span>
-          <strong>특정한 사람</strong>
-          <span>현재 연인이나 마음에 둔 한 사람을 떠올릴게요.</span>
+          <span class="track-select-card__meta">20개 장면 · 약 4분</span>
+          <strong>내가 사랑을<br />느끼는 언어</strong>
+          <span>상대가 어떻게 해줄 때 사랑이 가장 선명하게 와닿는지 알아봐요.</span>
         </button>
-        <button class="context-card" data-action="choose-context" data-context="general">
+        <button class="context-card track-select-card track-select-card--express" data-action="choose-track" data-track="express">
           <span class="context-card__icon" aria-hidden="true">✦</span>
-          <strong>일반적인 연인</strong>
-          <span>앞으로 만나고 싶은 관계를 상상하며 답할게요.</span>
+          <span class="track-select-card__meta">20개 장면 · 약 4분</span>
+          <strong>내가 사랑을<br />표현하는 언어</strong>
+          <span>내가 상대에게 자연스럽게 먼저 해주고 싶은 행동을 알아봐요.</span>
         </button>
       </div>
       <button class="text-button" data-action="back-welcome">← 처음으로</button>
@@ -184,10 +191,10 @@ function renderContext() {
 
 function renderChapterIntro() {
   const isReceive = state.activeTrack === "receive";
-  const completed = state.completedTracks.length;
+  const hasPreviousResult = state.completedTracks.length > 0;
   return `
     <section class="screen screen--chapter ${isReceive ? "accent-receive" : "accent-express"}" aria-labelledby="app-title">
-      <div class="chapter-count">CHAPTER ${completed + 1} / 2</div>
+      <div class="chapter-count">20개 장면 · 약 4분</div>
       <div class="chapter-orbit" aria-hidden="true">
         <span>${isReceive ? "받기" : "표현"}</span>
       </div>
@@ -207,6 +214,9 @@ function renderChapterIntro() {
       </ul>
       <button class="primary-button" data-action="start-track">
         20개 장면 시작하기 <span aria-hidden="true">→</span>
+      </button>
+      <button class="text-button chapter-back" data-action="${hasPreviousResult ? "back-result" : "back-track-select"}">
+        ← ${hasPreviousResult ? "이전 결과로 돌아가기" : "다른 테스트 고르기"}
       </button>
     </section>
   `;
@@ -323,32 +333,6 @@ function topCategoryMarkup(result) {
     .join("");
 }
 
-function renderChapterComplete() {
-  const track = state.activeTrack;
-  const result = calculateTrackResult(track, state.answers[track]);
-  const isLast = track === "express";
-  return `
-    <section class="screen screen--chapter-complete" aria-labelledby="app-title">
-      <div class="completion-burst" aria-hidden="true">✦</div>
-      <div class="eyebrow">${TRACK_LABELS[track]} 완료</div>
-      <h1 id="app-title">지금까지 가장<br />마음이 간 행동은</h1>
-      <div class="top-category">${topCategoryMarkup(result)}</div>
-      <p class="section-copy section-copy--narrow">
-        ${
-          isLast
-            ? "두 방향을 모두 확인했어요. 이제 순위와 차이, 실제로 선택한 행동을 한눈에 정리해드릴게요."
-            : result.contextSplitCount >= 4
-            ? "상황에 따라 선택이 꽤 달랐어요. 이것도 중요한 결과이므로 마지막에 함께 보여드릴게요."
-            : "선택의 흐름이 조금씩 보이기 시작했어요. 다음 챕터에서 반대 방향도 확인해볼게요."
-        }
-      </p>
-      <button class="primary-button" data-action="${isLast ? "show-result" : "next-track"}">
-        ${isLast ? "내 관계 선호 지도 보기" : "표현하는 순간으로"} <span aria-hidden="true">→</span>
-      </button>
-    </section>
-  `;
-}
-
 function rankingMarkup(result, track) {
   return `
     <div class="ranking-card ranking-card--${track}">
@@ -387,89 +371,187 @@ function getFeaturedActions(result) {
     .slice(0, 3);
 }
 
-function actionCardsMarkup(receiveResult, expressResult) {
-  const groups = [
-    { label: "나에게 해주면 좋은 행동", track: "receive", actions: getFeaturedActions(receiveResult) },
-    { label: "내가 자연스럽게 하는 행동", track: "express", actions: getFeaturedActions(expressResult) },
-  ];
-
-  return groups
-    .map(
-      (group) => `
-        <div class="action-group">
-          <h3>${group.label}</h3>
-          ${group.actions
-            .map(
-              (item) => `
-                <article class="action-card action-card--${group.track}">
-                  <span>${item.context} · ${CATEGORIES[item.category].name}</span>
-                  <p>${item.text}</p>
-                </article>
-              `,
-            )
-            .join("")}
-        </div>
-      `,
-    )
-    .join("");
+function actionGroupMarkup(track, result) {
+  const label =
+    track === "receive"
+      ? "나에게 해주면 좋은 행동"
+      : "내가 자연스럽게 하는 행동";
+  const actions = getFeaturedActions(result);
+  return `
+    <div class="action-group action-group--single">
+      <h3>${label}</h3>
+      <div class="action-card-list">
+        ${actions
+          .map(
+            (item) => `
+              <article class="action-card action-card--${track}">
+                <span>${item.context} · ${CATEGORIES[item.category].name}</span>
+                <p>${item.text}</p>
+              </article>
+            `,
+          )
+          .join("")}
+      </div>
+    </div>
+  `;
 }
 
-function renderResult() {
-  const receiveResult = calculateTrackResult("receive", state.answers.receive);
-  const expressResult = calculateTrackResult("express", state.answers.express);
-  if (receiveResult.answeredCount < 20 || expressResult.answeredCount < 20) {
-    state.activeTrack = receiveResult.answeredCount < 20 ? "receive" : "express";
-    state.questionIndex = trackProgress(state.activeTrack);
-    state.view = "question";
-    persist();
-    return renderQuestion();
-  }
-
-  const difference = buildDifferenceSummary(receiveResult, expressResult);
-  const contextDependent =
-    receiveResult.contextSplitCount >= 4 || expressResult.contextSplitCount >= 4;
-
+function resultInsightMarkup(track, result) {
+  const contextDependent = result.contextSplitCount >= 4;
   return `
-    <section class="screen screen--result" aria-labelledby="app-title">
-      <div class="result-hero">
-        <div class="eyebrow">나의 관계 선호 지도</div>
-        <h1 id="app-title">마음이 움직이는<br /><em>순서를 찾았어요.</em></h1>
-        <p>${difference}</p>
+    <div class="result-insight result-insight--${track}">
+      <span aria-hidden="true">✦</span>
+      <div>
+        <strong>${contextDependent ? "한 가지 답보다 상황이 중요해요" : "선택의 중심이 비교적 선명해요"}</strong>
+        <p>
+          ${
+            contextDependent
+              ? "같은 두 행동도 장면에 따라 선택이 달랐어요. 고정 유형보다 그날 필요한 행동을 함께 이야기해보세요."
+              : track === "receive"
+                ? "상대에게 바라는 모든 행동이 중요해도, 지금은 이 순서로 사랑이 더 또렷하게 와닿았어요."
+                : "여러 방식으로 마음을 표현하지만, 지금은 이 순서의 행동을 더 자연스럽게 먼저 선택했어요."
+          }
+        </p>
       </div>
+    </div>
+  `;
+}
 
-      <div class="result-insight">
-        <span aria-hidden="true">✦</span>
-        <div>
-          <strong>${contextDependent ? "한 가지 답보다 상황이 중요해요" : "두 방향의 차이를 기억해두세요"}</strong>
-          <p>
-            ${
-              contextDependent
-                ? "같은 두 행동도 장면에 따라 선택이 달랐어요. 고정 유형보다 그날의 필요를 묻는 대화가 잘 맞을 수 있어요."
-                : "내가 자주 해주는 행동이 상대에게서 가장 받고 싶은 행동과 같지는 않을 수 있어요."
-            }
-          </p>
-        </div>
+function trackResultMarkup(track, result, positionLabel) {
+  return `
+    <section class="track-result-block track-result-block--${track}">
+      <div class="track-result-block__head">
+        <span>${positionLabel}</span>
+        <h2>${TRACK_LABELS[track]}</h2>
+        <div class="top-category">${topCategoryMarkup(result)}</div>
       </div>
-
-      <div class="ranking-grid">
-        ${rankingMarkup(receiveResult, "receive")}
-        ${rankingMarkup(expressResult, "express")}
+      ${resultInsightMarkup(track, result)}
+      <div class="single-ranking">
+        ${rankingMarkup(result, track)}
       </div>
-
-      <section class="result-section">
+      <div class="result-section result-section--actions">
         <div class="result-section__head">
           <span>내 답에서 꺼낸 문장</span>
           <h2>추상적인 유형보다<br />이 행동을 기억하세요.</h2>
         </div>
-        <div class="action-grid">
-          ${actionCardsMarkup(receiveResult, expressResult)}
+        ${actionGroupMarkup(track, result)}
+      </div>
+    </section>
+  `;
+}
+
+function combinedResultMarkup(receiveResult, expressResult) {
+  const difference = buildDifferenceSummary(receiveResult, expressResult);
+  const contextDependent =
+    receiveResult.contextSplitCount >= 4 || expressResult.contextSplitCount >= 4;
+  return `
+    <section class="combined-result" aria-labelledby="combined-title">
+      <div class="eyebrow">두 결과 통합본</div>
+      <h2 id="combined-title">느끼는 방식과 표현하는 방식을<br />함께 보면</h2>
+      <p class="combined-result__summary">${difference}</p>
+      <div class="combined-top-grid">
+        <div>
+          <span>사랑을 느낄 때</span>
+          <div class="top-category">${topCategoryMarkup(receiveResult)}</div>
         </div>
-      </section>
+        <div>
+          <span>사랑을 표현할 때</span>
+          <div class="top-category">${topCategoryMarkup(expressResult)}</div>
+        </div>
+      </div>
+      <div class="result-insight">
+        <span aria-hidden="true">✦</span>
+        <div>
+          <strong>${contextDependent ? "관계에서는 그날의 상황도 중요해요" : "두 방향의 차이를 대화에 활용해보세요"}</strong>
+          <p>
+            ${
+              contextDependent
+                ? "같은 행동도 장면에 따라 선택이 달라졌어요. 순위를 고정된 유형으로 보기보다 그날 필요한 행동을 묻는 출발점으로 사용하세요."
+                : "내가 자주 해주는 행동이 상대에게서 가장 받고 싶은 행동과 같지는 않을 수 있어요. 두 결과의 차이를 그대로 알려주세요."
+            }
+          </p>
+        </div>
+      </div>
+    </section>
+  `;
+}
+
+function additionalTestMarkup(track) {
+  const isReceive = track === "receive";
+  return `
+    <section class="continue-panel continue-panel--${track}">
+      <div>
+        <span>여기서 끝내도 괜찮아요</span>
+        <h2>${isReceive ? "사랑을 느끼는 언어" : "사랑을 표현하는 언어"}도 알아볼까요?</h2>
+        <p>20개 장면을 더 선택하면 두 결과의 차이를 합쳐서 보여드려요.</p>
+      </div>
+      <button class="primary-button" data-action="start-remaining-track" data-track="${track}">
+        추가 테스트 하기 <span aria-hidden="true">→</span>
+      </button>
+    </section>
+  `;
+}
+
+function renderResult() {
+  const completedTracks = state.completedTracks.filter((track) =>
+    isTrackComplete(state.answers[track]),
+  );
+  if (completedTracks.length === 0) {
+    state.activeTrack = null;
+    state.view = "track-select";
+    persist();
+    return renderTrackSelect();
+  }
+
+  const resultOrder = getResultOrder(completedTracks, state.activeTrack);
+  const results = Object.fromEntries(
+    completedTracks.map((track) => [
+      track,
+      calculateTrackResult(track, state.answers[track]),
+    ]),
+  );
+  const allComplete = completedTracks.length === 2;
+  const remainingTrack = getRemainingTrack(completedTracks);
+  const shareText = allComplete
+    ? buildShareText(results.receive, results.express)
+    : buildTrackShareText(results[resultOrder[0]]);
+
+  return `
+    <section class="screen screen--result" aria-labelledby="app-title">
+      <div class="result-hero">
+        <div class="eyebrow">${allComplete ? "두 가지 테스트 완료" : "첫 번째 테스트 완료"}</div>
+        <h1 id="app-title">${allComplete ? "두 방향의 결과를<br /><em>모두 찾았어요.</em>" : "한 가지 결과를<br /><em>먼저 확인해요.</em>"}</h1>
+        <p>
+          ${
+            allComplete
+              ? "방금 마친 결과부터 먼저 보여드리고, 앞서 완료한 결과와 두 방향을 합친 통합본을 이어서 정리했어요."
+              : "지금 마친 테스트만으로도 결과를 볼 수 있어요. 나머지 테스트는 원할 때 이어서 진행하세요."
+          }
+        </p>
+      </div>
+
+      <div class="result-stack">
+        ${resultOrder
+          .map((track, index) =>
+            trackResultMarkup(
+              track,
+              results[track],
+              allComplete
+                ? index === 0
+                  ? "방금 마친 테스트 결과"
+                  : "먼저 마친 테스트 결과"
+                : "이번 테스트 결과",
+            ),
+          )
+          .join("")}
+      </div>
+
+      ${allComplete ? combinedResultMarkup(results.receive, results.express) : additionalTestMarkup(remainingTrack)}
 
       <div class="share-panel">
         <div>
           <strong>상대와 이야기해보고 싶다면</strong>
-          <p>순위와 차이 요약만 텍스트로 공유할 수 있어요.</p>
+          <p>${allComplete ? "두 테스트의 순위와 차이" : "이번 테스트의 순위"}를 텍스트로 공유할 수 있어요.</p>
         </div>
         <div class="share-actions">
           <button class="primary-button" data-action="share-result">결과 공유하기</button>
@@ -477,7 +559,7 @@ function renderResult() {
         </div>
         <label class="copy-fallback" hidden>
           <span>아래 텍스트를 직접 선택해 복사해주세요.</span>
-          <textarea readonly>${buildShareText(receiveResult, expressResult)}</textarea>
+          <textarea readonly>${shareText}</textarea>
         </label>
       </div>
 
@@ -485,7 +567,7 @@ function renderResult() {
         <strong>결과 해석의 범위</strong>
         <p>
           이 순위는 다른 사람과 비교하는 점수나 심리 진단이 아닙니다.
-          현재 떠올린 관계와 장면 안에서의 상대적인 선택이며 시간이 지나면 달라질 수 있어요.
+          지금 장면들에서의 상대적인 선택이며 시간이 지나면 달라질 수 있어요.
           응답은 이 브라우저에만 저장됩니다.
         </p>
       </aside>
@@ -507,11 +589,10 @@ function renderDataError() {
 function render() {
   const renderers = {
     welcome: renderWelcome,
-    context: renderContext,
+    "track-select": renderTrackSelect,
     "chapter-intro": renderChapterIntro,
     question: renderQuestion,
     confidence: renderConfidence,
-    "chapter-complete": renderChapterComplete,
     result: renderResult,
   };
 
@@ -543,7 +624,7 @@ function commitAnswer(confidence) {
 
   if (state.questionIndex >= state.order[track].length - 1) {
     if (!state.completedTracks.includes(track)) state.completedTracks.push(track);
-    state.view = "chapter-complete";
+    state.view = "result";
   } else {
     state.questionIndex += 1;
     state.view = "question";
@@ -579,10 +660,19 @@ function revealCopyFallback(text) {
 }
 
 function currentShareText() {
-  return buildShareText(
-    calculateTrackResult("receive", state.answers.receive),
-    calculateTrackResult("express", state.answers.express),
+  const completedTracks = state.completedTracks.filter((track) =>
+    isTrackComplete(state.answers[track]),
   );
+  if (completedTracks.length === 2) {
+    return buildShareText(
+      calculateTrackResult("receive", state.answers.receive),
+      calculateTrackResult("express", state.answers.express),
+    );
+  }
+  const track = getResultOrder(completedTracks, state.activeTrack)[0];
+  return track
+    ? buildTrackShareText(calculateTrackResult(track, state.answers[track]))
+    : "";
 }
 
 app.addEventListener("click", async (event) => {
@@ -590,13 +680,22 @@ app.addEventListener("click", async (event) => {
   if (!button) return;
   const action = button.dataset.action;
 
-  if (action === "begin") setView("context");
+  if (action === "begin") setView("track-select");
   if (action === "back-welcome") setView("welcome");
-  if (action === "choose-context") {
-    state.context = button.dataset.context;
-    state.activeTrack = "receive";
+  if (action === "choose-track") {
+    const track = button.dataset.track;
+    if (!["receive", "express"].includes(track)) return;
+    state.activeTrack = track;
     state.questionIndex = 0;
     setView("chapter-intro");
+  }
+  if (action === "back-track-select") {
+    state.activeTrack = null;
+    setView("track-select");
+  }
+  if (action === "back-result") {
+    state.activeTrack = state.completedTracks.at(-1) ?? null;
+    setView("result");
   }
   if (action === "start-track") {
     state.questionIndex = Math.min(trackProgress(state.activeTrack), 19);
@@ -616,12 +715,13 @@ app.addEventListener("click", async (event) => {
       setView("question");
     }
   }
-  if (action === "next-track") {
-    state.activeTrack = "express";
-    state.questionIndex = 0;
+  if (action === "start-remaining-track") {
+    const track = button.dataset.track;
+    if (track !== getRemainingTrack(state.completedTracks)) return;
+    state.activeTrack = track;
+    state.questionIndex = trackProgress(track);
     setView("chapter-intro");
   }
-  if (action === "show-result") setView("result");
   if (action === "copy-result") {
     try {
       await copyText(currentShareText());

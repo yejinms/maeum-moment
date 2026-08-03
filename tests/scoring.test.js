@@ -4,6 +4,7 @@ import { CATEGORIES, getQuestions } from "../js/data.js";
 import {
   buildDifferenceSummary,
   buildShareText,
+  buildTrackShareText,
   calculateTrackResult,
 } from "../js/scoring.js";
 
@@ -109,3 +110,13 @@ test("share text contains both ordered sections and disclaimer", () => {
   assert.match(text, /진단이 아니라/);
 });
 
+test("single-track share text only contains the completed result", () => {
+  const receive = calculateTrackResult(
+    "receive",
+    answersFavoring("receive", "time"),
+  );
+  const text = buildTrackShareText(receive);
+  assert.match(text, /사랑을 느끼는 순서/);
+  assert.doesNotMatch(text, /사랑을 표현하는 순서/);
+  assert.match(text, /진단이 아니라/);
+});

@@ -422,6 +422,21 @@ a:focus-visible {
   word-break: keep-all;
 }
 
+.track-select-card__meta {
+  margin-top: 16px;
+  color: var(--coral);
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.track-select-card--express .track-select-card__meta {
+  color: #71801d;
+}
+
+.track-select-card--express .context-card__icon {
+  background: var(--lime-soft);
+}
+
 .screen--chapter,
 .screen--chapter-complete {
   text-align: center;
@@ -804,6 +819,52 @@ a:focus-visible {
   word-break: keep-all;
 }
 
+.result-stack {
+  display: grid;
+  gap: 52px;
+}
+
+.track-result-block {
+  padding: clamp(24px, 5vw, 42px);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-large);
+  background: rgba(255, 255, 255, 0.72);
+  box-shadow: var(--shadow);
+}
+
+.track-result-block--receive {
+  border-top: 8px solid var(--coral);
+}
+
+.track-result-block--express {
+  border-top: 8px solid #9fb337;
+}
+
+.track-result-block__head {
+  text-align: center;
+}
+
+.track-result-block__head > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.track-result-block__head h2 {
+  margin: 8px 0 0;
+  font-size: clamp(30px, 6vw, 46px);
+  letter-spacing: -0.05em;
+}
+
+.track-result-block__head .top-category {
+  margin-block: 22px 30px;
+}
+
+.single-ranking {
+  max-width: 590px;
+  margin-inline: auto;
+}
+
 .result-insight {
   display: flex;
   gap: 18px;
@@ -948,6 +1009,10 @@ a:focus-visible {
   margin-top: 72px;
 }
 
+.result-section--actions {
+  margin-top: 48px;
+}
+
 .result-section__head > span {
   color: var(--coral);
   font-size: 12px;
@@ -965,6 +1030,17 @@ a:focus-visible {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
+}
+
+.action-card-list {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.action-card-list .action-card {
+  height: 100%;
+  margin-bottom: 0;
 }
 
 .action-group h3 {
@@ -1002,6 +1078,106 @@ a:focus-visible {
   line-height: 1.6;
   letter-spacing: -0.025em;
   word-break: keep-all;
+}
+
+.continue-panel,
+.combined-result {
+  margin-top: 58px;
+  padding: clamp(26px, 5vw, 42px);
+  border: 1.5px solid var(--ink);
+  border-radius: var(--radius-large);
+}
+
+.continue-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 28px;
+  background: var(--lavender-soft);
+  box-shadow: 7px 7px 0 var(--ink);
+}
+
+.continue-panel--receive {
+  background: var(--coral-soft);
+}
+
+.continue-panel--express {
+  background: var(--lime-soft);
+}
+
+.continue-panel > div > span,
+.combined-top-grid > div > span {
+  color: var(--muted);
+  font-size: 12px;
+  font-weight: 850;
+}
+
+.continue-panel h2,
+.combined-result > h2 {
+  margin: 8px 0 10px;
+  font-size: clamp(25px, 5vw, 38px);
+  line-height: 1.2;
+  letter-spacing: -0.045em;
+}
+
+.continue-panel p,
+.combined-result__summary {
+  margin: 0;
+  color: var(--muted);
+  font-size: 15px;
+  line-height: 1.65;
+  word-break: keep-all;
+}
+
+.continue-panel .primary-button {
+  flex: 0 0 auto;
+}
+
+.combined-result {
+  background: var(--white);
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+
+.combined-result > h2 {
+  margin-top: 18px;
+}
+
+.combined-result__summary {
+  max-width: 590px;
+  margin: 18px auto 0;
+  color: var(--ink);
+  font-size: 18px;
+  font-weight: 750;
+}
+
+.combined-top-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 14px;
+  margin: 30px 0;
+}
+
+.combined-top-grid > div {
+  padding: 22px 16px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-medium);
+  background: var(--paper);
+}
+
+.combined-top-grid .top-category {
+  margin: 16px 0 0;
+}
+
+.combined-top-grid .top-category span {
+  padding: 10px 12px;
+  font-size: 13px;
+  box-shadow: none;
+}
+
+.combined-result .result-insight {
+  margin: 0;
+  text-align: left;
 }
 
 .share-panel {
@@ -1172,6 +1348,11 @@ a:focus-visible {
     grid-template-columns: 1fr;
   }
 
+  .action-card-list,
+  .combined-top-grid {
+    grid-template-columns: 1fr;
+  }
+
   .context-card {
     min-height: 190px;
   }
@@ -1239,6 +1420,23 @@ a:focus-visible {
 
   .result-section {
     margin-top: 60px;
+  }
+
+  .track-result-block {
+    padding: 26px 18px;
+  }
+
+  .result-stack {
+    gap: 34px;
+  }
+
+  .continue-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .continue-panel .primary-button {
+    width: 100%;
   }
 
   .share-panel {
