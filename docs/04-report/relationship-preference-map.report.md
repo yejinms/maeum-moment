@@ -20,6 +20,10 @@
 표현 중 원하는 테스트 하나만 먼저 진행해 바로 결과를 볼 수 있다. 나머지 테스트는
 선택 사항이며, 완료하면 최근 결과와 이전 결과 아래에 두 방향의 통합본이 이어진다.
 
+2026-08-06에는 결과별 다시 하기를 추가했다. 느끼는 테스트 또는 표현하는 테스트 중
+선택한 응답만 초기화되며, 완료된 다른 테스트 결과는 그대로 유지된다. 전체 초기화
+버튼은 `두 테스트 응답 모두 지우기`로 범위를 명시했다.
+
 ### 1.2 Final Match Rate
 
 **100%** (Target: 90%)
@@ -40,6 +44,7 @@
 - [x] 받기/표현 테스트 시작 순서 선택
 - [x] 한 테스트 완료 직후 단독 결과 제공
 - [x] 선택형 추가 테스트와 최근·이전·통합 결과 구성
+- [x] 트랙별 독립 초기화와 다른 테스트 결과 보존
 - [x] 받기/표현을 통틀어 중복 없는 40개 관계 상황
 - [x] 접촉의 동의 전제를 공통 안내로 제공하고 경계 문항에만 절차 표현 유지
 - [x] 범주별 반복 동사와 행동 패턴을 제한하는 편집 테스트
@@ -75,7 +80,7 @@
 | Metric | Value |
 |---|---:|
 | Final match rate | 100% |
-| Automated tests | 15 passed / 0 failed |
+| Automated tests | 17 passed / 0 failed |
 | Source and test lines | 2,830 |
 | Project files excluding `.git` | 16 |
 | Scenario questions | 40 distinct contexts |
@@ -87,7 +92,7 @@
 
 ## 5. Quality Evidence
 
-- `npm test`: 15/15 pass
+- `npm test`: 17/17 pass
 - `git diff --check`: pass
 - first visit and receive/express test selection: pass
 - choice and confidence transition: pass
@@ -95,6 +100,7 @@
 - express-first 20 and immediate single result: pass
 - optional receive 20 and integrated result: pass
 - latest result → previous result → combined summary ordering: pass
+- express-only reset → receive result preserved → express offered as remaining test: pass
 - 390×844 result screen visual review: pass
 - 390/768/1280 document width check: pass
 

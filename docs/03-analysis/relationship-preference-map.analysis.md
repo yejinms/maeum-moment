@@ -18,6 +18,10 @@
 두 방향의 통합본을 한 화면에 이어서 제공한다. 특정 인물 여부 선택과 중간 완료
 화면은 제거했다.
 
+2026-08-06 Act에서는 결과 카드마다 해당 테스트만 다시 하는 제어를 추가했다.
+선택한 트랙의 응답과 완료 상태만 제거하고, 다른 트랙 결과와 기존 문항 순서는
+유지하도록 상태 전이를 분리했다. 전체 초기화는 별도 버튼으로 명확히 구분했다.
+
 Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다. 실제 브라우저에서
 온보딩부터 40문항 완주, 중간 챕터, 결과 화면까지 검증했으며 새로고침 후 진행 상태
 복구도 확인했다. 390px, 768px, 1280px 너비에서 가로 오버플로가 발생하지 않았다.
@@ -118,7 +122,7 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 ### Automated
 
 - Command: `npm test`
-- Result: 15 passed, 0 failed
+- Result: 17 passed, 0 failed
 - Command: `git diff --check`
 - Result: no whitespace errors
 
@@ -127,6 +131,8 @@ Plan과 Design에서 정의한 Starter 정적 MVP 범위를 모두 구현했다.
 - Start → track select → express 20 → single result → receive 20 → integrated result completed
 - Single result displayed the optional remaining-test CTA without forcing continuation
 - Final result order: latest receive result → earlier express result → integrated summary
+- With both results present, resetting express removed only express and returned to its intro
+- Returning to results preserved receive and exposed express as the remaining test
 - Choice → confidence → next question transition completed
 - Reload on question 2 restored the identical question
 - Result rankings, difference summary and selected-action cards rendered

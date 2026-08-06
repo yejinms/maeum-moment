@@ -1080,6 +1080,28 @@ a:focus-visible {
   word-break: keep-all;
 }
 
+.track-reset-panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  margin-top: 34px;
+  padding-top: 24px;
+  border-top: 1px dashed var(--line);
+}
+
+.track-reset-panel p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.track-reset-panel .secondary-button {
+  flex: 0 0 auto;
+  cursor: pointer;
+}
+
 .continue-panel,
 .combined-result {
   margin-top: 58px;
@@ -1433,6 +1455,15 @@ a:focus-visible {
   .continue-panel {
     align-items: stretch;
     flex-direction: column;
+  }
+
+  .track-reset-panel {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .track-reset-panel .secondary-button {
+    width: 100%;
   }
 
   .continue-panel .primary-button {

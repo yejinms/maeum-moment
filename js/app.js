@@ -15,6 +15,7 @@ import {
   getRemainingTrack,
   getResultOrder,
   isTrackComplete,
+  resetTrackProgress,
 } from "./flow.js";
 import { clearState, loadState, saveState, STATE_VERSION } from "./storage.js";
 
@@ -436,6 +437,12 @@ function trackResultMarkup(track, result, positionLabel) {
         </div>
         ${actionGroupMarkup(track, result)}
       </div>
+      <div class="track-reset-panel">
+        <p>이 테스트의 답만 지우고 처음부터 다시 선택할 수 있어요.</p>
+        <button class="secondary-button" data-action="reset-track" data-track="${track}">
+          ${track === "receive" ? "느끼는 언어" : "표현하는 언어"} 다시 하기
+        </button>
+      </div>
     </section>
   `;
 }
@@ -571,7 +578,7 @@ function renderResult() {
           응답은 이 브라우저에만 저장됩니다.
         </p>
       </aside>
-      <button class="text-button danger-link" data-action="reset">응답을 지우고 다시 시작</button>
+      <button class="text-button danger-link" data-action="reset">두 테스트 응답 모두 지우기</button>
     </section>
   `;
 }
@@ -721,6 +728,20 @@ app.addEventListener("click", async (event) => {
     state.activeTrack = track;
     state.questionIndex = trackProgress(track);
     setView("chapter-intro");
+  }
+  if (action === "reset-track") {
+    const track = button.dataset.track;
+    if (!["receive", "express"].includes(track)) return;
+    const trackName = track === "receive" ? "느끼는 언어" : "표현하는 언어";
+    const confirmed = window.confirm(
+      `${trackName} 응답만 지우고 다시 할까요? 다른 테스트 응답은 그대로 유지됩니다.`,
+    );
+    if (confirmed) {
+      state = resetTrackProgress(state, track);
+      persist();
+      render();
+      showToast(`${trackName} 응답만 지웠어요.`);
+    }
   }
   if (action === "copy-result") {
     try {

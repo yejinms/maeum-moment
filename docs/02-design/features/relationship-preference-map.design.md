@@ -247,6 +247,8 @@ External font requests are not required.
 - 저장 시점: 테스트 선택, 문항 선택, 확신도 선택, 이전 이동, 트랙 완료
 - 개인정보나 자유 입력 텍스트는 수집하지 않는다.
 - 초기화는 확인 대화상자 후 해당 키만 삭제한다.
+- 트랙별 다시 하기는 선택한 `answers[track]`과 `completedTracks` 항목만 제거하고,
+  다른 트랙의 응답·문항 순서·시드는 유지한 채 선택한 트랙 소개 화면으로 이동한다.
 
 ## 8. Interface Contracts
 
@@ -266,6 +268,7 @@ buildTrackShareText(result) -> string
 buildShareText(results) -> string
 getRemainingTrack(completedTracks) -> Track | null
 getResultOrder(completedTracks, activeTrack) -> Track[]
+resetTrackProgress(state, track) -> AppState
 ```
 
 ### 8.2 TrackResult

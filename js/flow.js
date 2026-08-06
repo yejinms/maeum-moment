@@ -15,3 +15,22 @@ export function getResultOrder(completedTracks = [], activeTrack = null) {
 export function isTrackComplete(answerMap = {}, requiredAnswers = 20) {
   return Object.keys(answerMap).length >= requiredAnswers;
 }
+
+export function resetTrackProgress(state, track) {
+  if (!TRACKS.includes(track)) return state;
+
+  return {
+    ...state,
+    view: "chapter-intro",
+    activeTrack: track,
+    questionIndex: 0,
+    pendingChoice: null,
+    answers: {
+      ...state.answers,
+      [track]: {},
+    },
+    completedTracks: state.completedTracks.filter(
+      (completedTrack) => completedTrack !== track,
+    ),
+  };
+}
