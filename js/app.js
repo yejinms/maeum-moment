@@ -440,7 +440,7 @@ function trackResultMarkup(track, result, positionLabel) {
       <div class="track-reset-panel">
         <p>이 테스트의 답만 지우고 처음부터 다시 선택할 수 있어요.</p>
         <button class="secondary-button" data-action="reset-track" data-track="${track}">
-          ${track === "receive" ? "느끼는 언어" : "표현하는 언어"} 다시 하기
+          다시 테스트하기
         </button>
       </div>
     </section>
