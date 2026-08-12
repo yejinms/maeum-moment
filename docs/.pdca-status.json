@@ -1,8 +1,9 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-08-06T08:09:27.952Z",
+  "lastUpdated": "2026-08-12T06:22:07.701Z",
   "activeFeatures": [
-    "relationship-preference-map"
+    "relationship-preference-map",
+    "adsense-readiness"
   ],
   "primaryFeature": "relationship-preference-map",
   "features": {
@@ -48,6 +49,46 @@
         "lastUpdated": "2026-08-06T08:09:27.952Z"
       },
       "completedAt": "2026-08-06T08:09:27.951Z"
+    },
+    "adsense-readiness": {
+      "phase": "check",
+      "matchRate": null,
+      "iterationCount": 1,
+      "documents": {},
+      "taskChain": [
+        {
+          "phase": "plan",
+          "status": "completed",
+          "createdAt": "2026-08-12T06:13:02.823Z",
+          "completedAt": "2026-08-12T06:16:18.028Z"
+        },
+        {
+          "phase": "design",
+          "status": "completed",
+          "createdAt": "2026-08-12T06:13:02.823Z",
+          "completedAt": "2026-08-12T06:17:24.043Z"
+        },
+        {
+          "phase": "do",
+          "status": "completed",
+          "createdAt": "2026-08-12T06:13:02.823Z",
+          "completedAt": "2026-08-12T06:22:07.692Z"
+        },
+        {
+          "phase": "check",
+          "status": "active",
+          "createdAt": "2026-08-12T06:13:02.823Z"
+        },
+        {
+          "phase": "report",
+          "status": "pending",
+          "createdAt": "2026-08-12T06:13:02.823Z"
+        }
+      ],
+      "timestamps": {
+        "started": "2026-08-12T06:13:02.824Z",
+        "lastUpdated": "2026-08-12T06:22:07.692Z"
+      }
     }
   },
   "pipeline": {
@@ -58,7 +99,7 @@
   "session": {
     "startedAt": "2026-07-29T06:57:18.605Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-08-06T08:09:27.952Z"
+    "lastActivity": "2026-08-12T06:22:07.701Z"
   },
   "history": [
     {
@@ -257,6 +298,51 @@
       "phase": "report",
       "nextPhase": "completed",
       "timestamp": "2026-08-06T08:09:27.951Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "from": "plan",
+      "to": "design",
+      "timestamp": "2026-08-12T06:16:18.025Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "action": "phase_complete",
+      "phase": "plan",
+      "nextPhase": "design",
+      "timestamp": "2026-08-12T06:16:18.026Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "from": "design",
+      "to": "design",
+      "timestamp": "2026-08-12T06:16:18.037Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "from": "design",
+      "to": "do",
+      "timestamp": "2026-08-12T06:17:24.041Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "action": "phase_complete",
+      "phase": "design",
+      "nextPhase": "do",
+      "timestamp": "2026-08-12T06:17:24.042Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "from": "do",
+      "to": "check",
+      "timestamp": "2026-08-12T06:22:07.689Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "action": "phase_complete",
+      "phase": "do",
+      "nextPhase": "check",
+      "timestamp": "2026-08-12T06:22:07.691Z"
     }
   ]
 }

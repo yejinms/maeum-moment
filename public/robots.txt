@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://yejinms.github.io/maeum-moment/sitemap.xml
