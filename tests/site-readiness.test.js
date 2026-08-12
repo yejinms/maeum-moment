@@ -24,10 +24,10 @@ test("all public pages have metadata and shared information navigation", async (
   }
 });
 
-test("privacy notice describes local answers and future advertising cookies", async () => {
+test("privacy notice describes local answers and active AdSense connection", async () => {
   const privacy = await read("privacy.html");
   assert.match(privacy, /localStorage/);
-  assert.match(privacy, /현재 사이트에는 Google AdSense 광고가 활성화되어 있지 않습니다/);
+  assert.match(privacy, /Google AdSense 연결 코드가 설치되어 있으며 사이트는 검토 중입니다/);
   assert.match(privacy, /제3자 광고 사업자/);
   assert.match(privacy, /https:\/\/adssettings\.google\.com\//);
   assert.match(privacy, /답변과 결과를 광고 개인화 정보로 의도적으로 전송하지 않습니다/);
@@ -53,8 +53,17 @@ test("crawler files point to the deployed GitHub Pages paths", async () => {
   }
 });
 
-test("no guessed AdSense publisher id is shipped", async () => {
+test("all pages use the issued AdSense publisher id", async () => {
   for (const [path] of pages) {
-    assert.doesNotMatch(await read(path), /ca-pub-\d+/);
+    const html = await read(path);
+    assert.match(html, /pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js\?client=ca-pub-1147778292873954/);
+    assert.equal((html.match(/ca-pub-1147778292873954/g) ?? []).length, 1);
   }
+});
+
+test("ads.txt uses the exact issued publisher id", async () => {
+  assert.equal(
+    await read("public/ads.txt"),
+    "google.com, pub-1147778292873954, DIRECT, f08c47fec0942fa0\n",
+  );
 });
