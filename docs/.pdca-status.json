@@ -1,6 +1,6 @@
 {
   "version": "2.0",
-  "lastUpdated": "2026-08-12T06:22:07.701Z",
+  "lastUpdated": "2026-08-12T06:52:14.546Z",
   "activeFeatures": [
     "relationship-preference-map",
     "adsense-readiness"
@@ -51,7 +51,7 @@
       "completedAt": "2026-08-06T08:09:27.951Z"
     },
     "adsense-readiness": {
-      "phase": "check",
+      "phase": "completed",
       "matchRate": null,
       "iterationCount": 1,
       "documents": {},
@@ -76,19 +76,22 @@
         },
         {
           "phase": "check",
-          "status": "active",
-          "createdAt": "2026-08-12T06:13:02.823Z"
+          "status": "completed",
+          "createdAt": "2026-08-12T06:13:02.823Z",
+          "completedAt": "2026-08-12T06:52:11.131Z"
         },
         {
           "phase": "report",
-          "status": "pending",
-          "createdAt": "2026-08-12T06:13:02.823Z"
+          "status": "completed",
+          "createdAt": "2026-08-12T06:13:02.823Z",
+          "completedAt": "2026-08-12T06:52:14.546Z"
         }
       ],
       "timestamps": {
         "started": "2026-08-12T06:13:02.824Z",
-        "lastUpdated": "2026-08-12T06:22:07.692Z"
-      }
+        "lastUpdated": "2026-08-12T06:52:14.546Z"
+      },
+      "completedAt": "2026-08-12T06:52:14.545Z"
     }
   },
   "pipeline": {
@@ -99,7 +102,7 @@
   "session": {
     "startedAt": "2026-07-29T06:57:18.605Z",
     "onboardingCompleted": false,
-    "lastActivity": "2026-08-12T06:22:07.701Z"
+    "lastActivity": "2026-08-12T06:52:14.546Z"
   },
   "history": [
     {
@@ -343,6 +346,26 @@
       "phase": "do",
       "nextPhase": "check",
       "timestamp": "2026-08-12T06:22:07.691Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "from": "check",
+      "to": "act",
+      "timestamp": "2026-08-12T06:52:11.127Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "action": "phase_complete",
+      "phase": "check",
+      "nextPhase": "act",
+      "timestamp": "2026-08-12T06:52:11.130Z"
+    },
+    {
+      "feature": "adsense-readiness",
+      "action": "phase_complete",
+      "phase": "report",
+      "nextPhase": "completed",
+      "timestamp": "2026-08-12T06:52:14.545Z"
     }
   ]
 }
